@@ -42,7 +42,7 @@ const getCategories = async (
 const getCategory = async (
   req: Request<{id: string}>,
   res: Response<DBMessageResponse>,
-  next: NextFunction, ) => {
+  next: NextFunction ) => {
     try {
       const category = await CategoryModel.findById(req.params.id);
 
