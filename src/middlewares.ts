@@ -1,6 +1,8 @@
 import {NextFunction, Request, Response} from 'express';
 import CustomError from './classes/CustomError';
 import {ErrorResponse} from './types/Messages';
+import { Species } from './types/Species';
+import getWikiImake from './utils/getWikiImage';
 
 const notFound = (req: Request, res: Response, next: NextFunction) => {
   const error = new CustomError(`🔍 - Not Found - ${req.originalUrl}`, 404);
@@ -22,4 +24,21 @@ const errorHandler = (
   });
 };
 
-export {notFound, errorHandler};
+const addImaageToSpecies = async (
+  req: Request<{}, {}, Species>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const {species_name} = req.body;
+    const image = await getWikiImake(species_name);
+    console.log('kuva', image);
+    req.body.image = image;
+    next();
+  } catch (error) {
+    next(new CustomError((error as Error).message, 500));
+  }
+};
+
+
+export {notFound, errorHandler, addImaageToSpecies};

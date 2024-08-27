@@ -15,5 +15,6 @@ router.get<{}, MessageResponse>('/', (_req: Request, res: Response) => {
 router.use('/categories', categoryRoute);
 router.use('/species', speciesRoute);
 router.use('/animals', animalRoute);
+router.use('/location', animalRoute);
 
 export default router;

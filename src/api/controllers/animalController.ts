@@ -58,6 +58,30 @@ const getSingleAnimal = async (
   }
 };
 
+const getAnimalsByBox = async(
+  req: Request<{}, {}, {}, {topRight: string, bottomLeft: string}>,
+  res: Response<Animal[]>,
+  next: NextFunction,
+) => {
+  try {
+    const {topRight, bottomLeft} = req.query;
+    const animals = await AnimalModel.find({
+      location: {
+        $geoWithin: {
+          $box: [
+            [topRight.split(','),
+            bottomLeft.split(',')],
+          ],
+        },
+      },
+    });
+
+    res.json(animals);
+  } catch (error) {
+    next(new CustomError((error as Error).message, 500));
+  }
+};
+
 const putAnimal = async (
   req: Request<{id: string}, {}, Animal>,
   res: Response<DBMessageResponse>,
@@ -104,4 +128,4 @@ const deleteAnimal = async (
   }
 };
 
-export {postAnimal, getAnimal, getSingleAnimal, putAnimal, deleteAnimal};
+export {postAnimal, getAnimal, getSingleAnimal, putAnimal, deleteAnimal, getAnimalsByBox};

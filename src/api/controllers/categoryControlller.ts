@@ -14,7 +14,7 @@ const postCategory = async (req: Request<{}, {}, Category>, res: Response<DBMess
     const newCategory = new CategoryModel(req.body);
     const savedCategory = await newCategory.save();
 
-    res.json({
+    res.status(201).json({
       message: 'Category added successfully',
       data: savedCategory,
     });
