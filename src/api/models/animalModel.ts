@@ -35,17 +35,15 @@ animalSchema.statics.findBySpecies = function (
         from: 'species',
         localField: 'species',
         foreignField: '_id',
-        as: 'species_info',
+        as: 'species',
       },
     },
     {
       $match: {
-        'species_info.species_name': species_name,
+        'species.species_name': species_name,
       },
     },
   ]);
 };
-
-//  return this.find({species: species_name}).populate('species');
 
 export default model<Animal, AnimalModel>('Animal', animalSchema);

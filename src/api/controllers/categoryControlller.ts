@@ -15,7 +15,7 @@ const postCategory = async (req: Request<{}, {}, Category>, res: Response<DBMess
     const savedCategory = await newCategory.save();
 
     res.status(201).json({
-      message: 'Category added successfully',
+      message: 'Category created',
       data: savedCategory,
     });
 

@@ -32,7 +32,9 @@ const getAnimal = async (
   next: NextFunction,
 ) => {
   try {
-    const species = await AnimalModel.find();
+    const species = await AnimalModel.find().select('-__v').populate({
+      path: 'species', select: '-__v', populate: {
+        path: 'category', select: '-__v'}});
 
     res.json(species);
   } catch (error) {
