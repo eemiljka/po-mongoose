@@ -128,4 +128,20 @@ const deleteAnimal = async (
   }
 };
 
-export {postAnimal, getAnimal, getSingleAnimal, putAnimal, deleteAnimal, getAnimalsByBox};
+
+const getBySpecies = async (
+  req: Request<{species: string}>,
+  res: Response<Animal[]>,
+  next: NextFunction,
+) => {
+  try {
+    const animals = await AnimalModel.findBySpecies(req.params.species);
+
+    res.json(animals);
+  } catch (error) {
+    next(new CustomError((error as Error).message, 500));
+  }
+};
+
+
+export {postAnimal, getAnimal, getSingleAnimal, putAnimal, deleteAnimal, getAnimalsByBox, getBySpecies};
