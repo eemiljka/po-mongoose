@@ -3,6 +3,7 @@ import SpeciesModel from '../models/speciesModel';
 import {Species} from '../../types/Species';
 import {MessageResponse} from '../../types/Messages';
 import CustomError from '../../classes/CustomError';
+import { Polygon } from 'geojson';
 
 type DBMessageResponse = MessageResponse & {
   data: Species | Species[];
@@ -104,4 +105,31 @@ const deleteSpecies = async (
   }
 };
 
-export {postSpecies, getSpecies, getSingleSpecies, putSpecies, deleteSpecies};
+const getByArea = async (
+  req: Request<{}, {}, { type: "Polygon"; coordinates: number[][][] }>,
+  res: Response<Species[]>,
+  next: NextFunction,
+) => {
+  try {
+    const { type, coordinates } = req.body;
+
+    if (type !== "Polygon" || !coordinates) {
+      throw new CustomError('Polygon is required in the request body', 400);
+    }
+
+    const polygon: Polygon = {
+      type,
+      coordinates,
+    };
+
+    console.log('Received polygon:', polygon);
+
+    const species = await SpeciesModel.findByArea(polygon);
+
+    res.json(species);
+  } catch (error) {
+    next(new CustomError((error as Error).message, 500));
+  }
+};
+
+export {postSpecies, getSpecies, getSingleSpecies, putSpecies, deleteSpecies, getByArea};
