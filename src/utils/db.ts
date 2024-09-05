@@ -5,7 +5,7 @@ dotenv.config();
 const mongoConnect = async () => {
   try {
     if (!process.env.DB_URL) {
-      throw new Error('DB_URL not found in .env file');
+      throw new Error('Database url not found in .env file');
     }
     const connection = await mongoose.connect(process.env.DB_URL);
     console.log('DB connected successfully');

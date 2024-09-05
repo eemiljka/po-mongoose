@@ -1,6 +1,5 @@
 import {model, Schema} from 'mongoose';
-import {Species, SpeciesModel} from '../../types/Species';
-import { Polygon } from 'geojson';
+import {Species} from '../../types/Species';
 
 const speciesSchema = new Schema<Species>({
   species_name: {
@@ -27,20 +26,9 @@ const speciesSchema = new Schema<Species>({
     coordinates: {
       type: [Number],
       required: true,
+      index: '2dsphere',
     },
   },
 });
 
-speciesSchema.statics.findByArea = function (
-  polygon: Polygon
-): Promise<Species[]> {
-  return this.find({
-    location: {
-      $geoWithin: {
-        $geometry: polygon,
-      },
-    },
-  }).exec();
-};
-
-export default model<Species, SpeciesModel>('Species', speciesSchema);
+export default model<Species>('Species', speciesSchema);

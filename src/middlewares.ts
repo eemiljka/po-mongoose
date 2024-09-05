@@ -1,8 +1,8 @@
 import {NextFunction, Request, Response} from 'express';
 import CustomError from './classes/CustomError';
 import {ErrorResponse} from './types/Messages';
-import { Species } from './types/Species';
-import getWikiImake from './utils/getWikiImage';
+import {Species} from './types/Species';
+import getWikiImage from './utils/getWikiImage';
 
 const notFound = (req: Request, res: Response, next: NextFunction) => {
   const error = new CustomError(`🔍 - Not Found - ${req.originalUrl}`, 404);
@@ -14,7 +14,7 @@ const errorHandler = (
   req: Request,
   res: Response<ErrorResponse>,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  next: NextFunction
+  next: NextFunction,
 ) => {
   // console.log('errorhanler', err);
   const statusCode = err.status !== 200 ? err.status || 500 : 500;
@@ -24,14 +24,14 @@ const errorHandler = (
   });
 };
 
-const addImaageToSpecies = async (
+const addImageToSpecies = async (
   req: Request<{}, {}, Species>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const {species_name} = req.body;
-    const image = await getWikiImake(species_name);
+    const image = await getWikiImage(species_name);
     console.log('kuva', image);
     req.body.image = image;
     next();
@@ -40,5 +40,4 @@ const addImaageToSpecies = async (
   }
 };
 
-
-export {notFound, errorHandler, addImaageToSpecies};
+export {notFound, errorHandler, addImageToSpecies};

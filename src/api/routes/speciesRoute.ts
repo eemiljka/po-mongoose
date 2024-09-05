@@ -5,13 +5,12 @@ import {
   getSpecies,
   postSpecies,
   putSpecies,
-  getByArea
 } from '../controllers/speciesController';
-import { addImaageToSpecies } from '../../middlewares';
+import { addImageToSpecies } from '../../middlewares';
 
 const router = express.Router();
 
-router.route('/').post(addImaageToSpecies, postSpecies).get(getSpecies);
+router.route('/').post(addImageToSpecies, postSpecies).get(getSpecies);
 
 router
   .route('/:id')
@@ -19,6 +18,5 @@ router
   .put(putSpecies)
   .delete(deleteSpecies);
 
-  router.post('/area', getByArea);
 
 export default router;
